@@ -8,15 +8,18 @@ public class Wallpaper {
   public static extern int SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
 }
 "@
-$code = [Wallpaper]::SystemParametersInfo(0x0014, 0, "$env:TEMP\wall.png", 0x01 -bor 0x02)
+[Wallpaper]::SystemParametersInfo(0x0014, 0, "$env:TEMP\wall.png", 0x01 -bor 0x02)
 
 for ($i = 0; $i -lt 50; $i++) {
-    (New-Object -ComObject WScript.Shell).SendKeys([char]175) # Volume Up
+    (New-Object -ComObject WScript.Shell).SendKeys([char]175)
     Start-Sleep -Milliseconds 50
 }
 
+$soundPath = "$env:TEMP\scream.wav"
+Invoke-WebRequest -Uri "https://github.com/I-Am-Jakoby/hak5-submissions/raw/main/OMG/Payloads/OMG-JumpScare/female_scream.wav" -OutFile $soundPath
+
 Add-Type -AssemblyName presentationCore
 $player = New-Object system.media.soundplayer
-$player.SoundLocation = "https://github.com/I-Am-Jakoby/hak5-submissions/blob/main/OMG/Payloads/OMG-JumpScare/female_scream.wav?raw=true"
+$player.SoundLocation = $soundPath
 $player.Load()
 $player.PlayLooping()
