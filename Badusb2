@@ -1,0 +1,22 @@
+Invoke-WebRequest -Uri "https://github.com/I-Am-Jakoby/hak5-submissions/raw/main/OMG/Payloads/OMG-JumpScare/jumpscare.png" -OutFile "$env:TEMP\wall.png"
+
+Add-Type @"
+using System;
+using System.Runtime.InteropServices;
+public class Wallpaper {
+  [DllImport("user32.dll", CharSet = CharSet.Auto)]
+  public static extern int SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
+}
+"@
+$code = [Wallpaper]::SystemParametersInfo(0x0014, 0, "$env:TEMP\wall.png", 0x01 -bor 0x02)
+
+for ($i = 0; $i -lt 50; $i++) {
+    (New-Object -ComObject WScript.Shell).SendKeys([char]175) # Volume Up
+    Start-Sleep -Milliseconds 50
+}
+
+Add-Type -AssemblyName presentationCore
+$player = New-Object system.media.soundplayer
+$player.SoundLocation = "https://github.com/I-Am-Jakoby/hak5-submissions/blob/main/OMG/Payloads/OMG-JumpScare/female_scream.wav?raw=true"
+$player.Load()
+$player.PlayLooping()
