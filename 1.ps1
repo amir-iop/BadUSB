@@ -1,23 +1,30 @@
-$url = "https://i.ibb.co/XJSPt9s/1.png"
-$outputPath = "d:\\img.jpg"
-$wallpaperStyle = 2  # 0: Tiled, 1: Centered, 2: Stretched
-
-IWR -Uri $url -OutFile $outputPath
-
-$signature = @'
+$base = "$env:APPDATA\winprank"
+New-Item -ItemType Directory -Force -Path $base | Out-Null
+$imgPath = "$base\wall.png"
+$soundPath = "$base\scream.wav"
+$imgUrl = "https://github.com/I-Am-Jakoby/hak5-submissions/raw/main/OMG/Payloads/OMG-JumpScare/jumpscare.png"
+$soundUrl = "https://github.com/I-Am-Jakoby/hak5-submissions/raw/main/OMG/Payloads/OMG-JumpScare/female_scream.wav"
+Invoke-WebRequest $imgUrl -OutFile $imgPath
+Invoke-WebRequest $soundUrl -OutFile $soundPath
+Add-Type @"
 using System;
 using System.Runtime.InteropServices;
-
 public class Wallpaper {
-    [DllImport("user32.dll", CharSet = CharSet.Auto)]
-    public static extern int SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
+  [DllImport("user32.dll", CharSet = CharSet.Auto)]
+  public static extern int SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
 }
-'@
-
-Add-Type -TypeDefinition $signature
-
-$SPI_SETDESKWALLPAPER = 0x0014
-$SPIF_UPDATEINIFILE = 0x01
-$SPIF_SENDCHANGE = 0x02
-
-[Wallpaper]::SystemParametersInfo($SPI_SETDESKWALLPAPER, 0, $outputPath, $SPIF_UPDATEINIFILE -bor $SPIF_SENDCHANGE)
+"@
+[Wallpaper]::SystemParametersInfo(0x0014, 0, $imgPath, 0x01 -bor 0x02)
+for ($i = 0; $i -lt 50; $i++) {
+    (New-Object -ComObject WScript.Shell).SendKeys([char]175)
+    Start-Sleep -Milliseconds 20
+}
+if (Test-Path $soundPath) {
+    Add-Type -AssemblyName presentationCore
+    $player = New-Object System.Media.SoundPlayer
+    $player.SoundLocation = $soundPath
+    $player.Load()
+    $player.PlayLooping()
+} else {
+    Write-Host "Download Fail"
+}
