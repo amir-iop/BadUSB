@@ -2,7 +2,7 @@ $base = "$env:APPDATA\winprank"
 New-Item -ItemType Directory -Force -Path $base | Out-Null
 $imgPath = "$base\wall.png"
 $soundPath = "$base\scream.wav"
-$imgUrl = "https://github.com/I-Am-Jakoby/hak5-submissions/raw/main/OMG/Payloads/OMG-JumpScare/jumpscare.png"
+$imgUrl = "https://raw.githubusercontent.com/amir-iop/BadUSB/6aa4203cac539729c1d0905e5e95ab1eb3f9c7cd/JumpscareWallpaper.jpg"
 $soundUrl = "https://github.com/amir-iop/BadUSB/raw/6aa4203cac539729c1d0905e5e95ab1eb3f9c7cd/JumpscareVoice.wav"
 Invoke-WebRequest $imgUrl -OutFile $imgPath
 Invoke-WebRequest $soundUrl -OutFile $soundPath
@@ -28,5 +28,6 @@ if (Test-Path $soundPath) {
 } else {
     Write-Host "Download Fail"
 }
+
 
 
