@@ -28,6 +28,7 @@ if (Test-Path $soundPath) {
 } else {
     Write-Host "Download Fail"
 }
+pause
 
 
 
