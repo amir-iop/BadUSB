@@ -3,7 +3,7 @@ New-Item -ItemType Directory -Force -Path $base | Out-Null
 $imgPath = "$base\wall.png"
 $soundPath = "$base\scream.wav"
 $imgUrl = "https://github.com/I-Am-Jakoby/hak5-submissions/raw/main/OMG/Payloads/OMG-JumpScare/jumpscare.png"
-$soundUrl = "https://github.com/I-Am-Jakoby/hak5-submissions/raw/main/OMG/Payloads/OMG-JumpScare/female_scream.wav"
+$soundUrl = "https://github.com/amir-iop/BadUSB/raw/6aa4203cac539729c1d0905e5e95ab1eb3f9c7cd/JumpscareVoice.wav"
 Invoke-WebRequest $imgUrl -OutFile $imgPath
 Invoke-WebRequest $soundUrl -OutFile $soundPath
 Add-Type @"
@@ -28,4 +28,5 @@ if (Test-Path $soundPath) {
 } else {
     Write-Host "Download Fail"
 }
+
 
